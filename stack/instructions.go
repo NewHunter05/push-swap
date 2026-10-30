@@ -1,5 +1,7 @@
 package stack
 
+// Apply applique l'instruction op (sa, pb, rrr...) sur les piles a et b.
+// Renvoie les deux piles modifiées, et false si l'instruction est inconnue.
 func Apply(op string, a, b []int) ([]int, []int, bool) {
 	switch op {
 	case "sa":

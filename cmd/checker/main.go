@@ -1,3 +1,5 @@
+// Checker lit des entiers en arguments et des instructions sur l'entrée standard.
+// Il applique les instructions puis affiche OK si a est triée et b vide, sinon KO.
 package main
 
 import (
@@ -12,21 +14,21 @@ func main() {
 	if len(os.Args[1:]) == 0 {
 		return
 	}
-	nombres, err := parser.Parse(os.Args[1:])
+	numbers, err := parser.Parse(os.Args[1:])
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error")
 		return
 	}
-	a := nombres
+	a := numbers
 	b := []int{}
 	scanner := bufio.NewScanner(os.Stdin)
 	var ok bool
 	for scanner.Scan() {
-		ligne := scanner.Text()
-		if ligne == "" {
+		lign := scanner.Text()
+		if lign == "" {
 			continue
 		}
-		a, b, ok = stack.Apply(ligne, a, b)
+		a, b, ok = stack.Apply(lign, a, b)
 		if !ok {
 			fmt.Fprintln(os.Stderr, "Error")
 			return
