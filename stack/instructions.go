@@ -29,7 +29,6 @@ func Apply(op string, a, b []int) ([]int, []int, bool) {
 		b, a = Push(b, a)
 	case "pb":
 		a, b = Push(a, b)
-
 	default:
 		return a, b, false
 	}

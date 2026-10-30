@@ -18,11 +18,10 @@ func main() {
 		fmt.Fprintln(os.Stderr, "Error")
 		return
 	}
-	a := numbers
-	if stack.IsSorted(a) {
+	if stack.IsSorted(numbers) {
 		return
 	}
-	ops := solver.Solve(a)
+	ops := solver.Solve(numbers)
 	for _, op := range ops {
 		fmt.Println(op)
 	}

@@ -14,12 +14,11 @@ func main() {
 	if len(os.Args[1:]) == 0 {
 		return
 	}
-	numbers, err := parser.Parse(os.Args[1:])
+	a, err := parser.Parse(os.Args[1:])
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error")
 		return
 	}
-	a := numbers
 	b := []int{}
 	scanner := bufio.NewScanner(os.Stdin)
 	var ok bool

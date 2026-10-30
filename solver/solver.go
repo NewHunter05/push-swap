@@ -3,15 +3,15 @@ package solver
 
 import "push-swap/stack"
 
-// Piles regroupe les deux piles et la liste des instructions déjà faites.
-type Piles struct {
+// Stacks regroupe les deux piles et la liste des instructions déjà faites.
+type Stacks struct {
 	A   []int
 	B   []int
 	Ops []string
 }
 
 // Do applique l'instruction op sur les piles et l'ajoute à la liste Ops.
-func Do(p Piles, op string) Piles {
+func Do(p Stacks, op string) Stacks {
 	p.A, p.B, _ = stack.Apply(op, p.A, p.B)
 	p.Ops = append(p.Ops, op)
 	return p
@@ -20,17 +20,14 @@ func Do(p Piles, op string) Piles {
 // Solve renvoie les instructions qui trient nums.
 // Choisit la méthode selon le nombre d'éléments.
 func Solve(nums []int) []string {
-	p := Piles{A: nums, B: []int{}}
+	p := Stacks{A: nums, B: []int{}}
 	switch len(p.A) {
 	case 2:
 		p = sortTwo(p)
-
 	case 3:
 		p = sortThree(p)
-
 	case 4, 5:
 		p = sortSmall(p)
-
 	default:
 		p = radixSort(p)
 	}
@@ -38,7 +35,7 @@ func Solve(nums []int) []string {
 }
 
 // sortTwo trie une pile a d'exactement 2 nombres.
-func sortTwo(p Piles) Piles {
+func sortTwo(p Stacks) Stacks {
 	if p.A[0] > p.A[1] {
 		p = Do(p, "sa")
 	}
@@ -47,7 +44,7 @@ func sortTwo(p Piles) Piles {
 
 // sortThree trie une pile a d'exactement 3 nombres, en 2 instructions maximum.
 // Elle envoie d'abord le plus grand en bas, puis remet les deux du haut dans l'ordre.
-func sortThree(p Piles) Piles {
+func sortThree(p Stacks) Stacks {
 	if p.A[0] > p.A[1] && p.A[0] > p.A[2] {
 		p = Do(p, "ra")
 	} else if p.A[1] > p.A[0] && p.A[1] > p.A[2] {
@@ -61,7 +58,7 @@ func sortThree(p Piles) Piles {
 
 // sortSmall trie une pile a de 4 ou 5 nombres.
 // Elle met de côté les plus petits dans b, trie les 3 restants, puis les ramène.
-func sortSmall(p Piles) Piles {
+func sortSmall(p Stacks) Stacks {
 	for len(p.A) > 3 {
 		p = pushMin(p)
 	}
@@ -85,7 +82,7 @@ func minIndex(s []int) int {
 
 // pushMin amène le plus petit nombre de a au sommet par le chemin le plus court,
 // puis l'envoie dans b.
-func pushMin(p Piles) Piles {
+func pushMin(p Stacks) Stacks {
 	length := len(p.A)
 	pos := minIndex(p.A)
 	if pos <= length/2 {
@@ -103,7 +100,7 @@ func pushMin(p Piles) Piles {
 
 // radixSort trie la pile a bit par bit (tri par base), en passant par b.
 // Utilisé pour plus de 5 nombres.
-func radixSort(p Piles) Piles {
+func radixSort(p Stacks) Stacks {
 	// On travaille sur les rangs : même ordre, mais valeurs de 0 à n-1.
 	p.A = ranks(p.A)
 	n := len(p.A)
@@ -127,7 +124,7 @@ func radixSort(p Piles) Piles {
 // ranks remplace chaque nombre par sa position dans l'ordre trié
 // (0 pour le plus petit). Le rang d'un nombre = combien de nombres sont plus petits.
 func ranks(nums []int) []int {
-	rank := []int{}
+	result := []int{}
 	for i := 0; i < len(nums); i++ {
 		count := 0
 		for j := 0; j < len(nums); j++ {
@@ -135,9 +132,9 @@ func ranks(nums []int) []int {
 				count++
 			}
 		}
-		rank = append(rank, count)
+		result = append(result, count)
 	}
-	return rank
+	return result
 }
 
 // bitAt renvoie le bit numéro k de n (0 ou 1).
